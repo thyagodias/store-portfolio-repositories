@@ -56,7 +56,6 @@ app.put('/repositories/:id', (request, response) => {
   }
 
   const { likes } = repositories[repositoryIndex]
-
   const repository = { id, title, url, techs, likes }
 
   repositories[repositoryIndex] = repository
@@ -64,12 +63,43 @@ app.put('/repositories/:id', (request, response) => {
   return response.json({ repository })
 })
 
-app.delete('/repositories/:id', (req, res) => {
-  // TODO
+/**
+ * A rota deve deletar o repositório com o id presente nos parâmetros da rota;
+ */
+app.delete('/repositories/:id', (request, response) => {
+  const { id } = request.params
+
+  const repositoryIndex = repositories.findIndex(
+    repository => repository.id === id
+  )
+
+  if (repositoryIndex < 0) {
+    return response.status(400).json({ error: 'Repositório não encontrado' })
+  }
+
+  repositories.splice(repositoryIndex, 1)
+
+  return response.status(204).send()
 })
 
+/**
+ * A rota deve aumentar o número de likes do repositório específico escolhido através do id presente
+ * nos parâmetros da rota, a cada chamada dessa rota, o número de likes deve ser aumentado em 1
+ */
 app.post('/repositories/:id/like', (request, response) => {
-  // TODO
+  const { id } = request.params
+
+  const repositoryIndex = repositories.findIndex(
+    repository => repository.id === id
+  )
+
+  if (repositoryIndex < 0) {
+    return response.status(400).json({ error: 'Repositório não encontrado' })
+  }
+
+  repositories[repositoryIndex].likes++
+
+  return response.status(201).send()
 })
 
 module.exports = app
