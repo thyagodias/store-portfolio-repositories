@@ -60,7 +60,7 @@ app.put('/repositories/:id', (request, response) => {
 
   repositories[repositoryIndex] = repository
 
-  return response.json({ repository })
+  return response.json(repository)
 })
 
 /**
@@ -99,7 +99,7 @@ app.post('/repositories/:id/like', (request, response) => {
 
   repositories[repositoryIndex].likes++
 
-  return response.status(201).send()
+  return response.status(201).json(repositories[repositoryIndex])
 })
 
 module.exports = app
